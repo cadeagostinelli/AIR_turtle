@@ -1,18 +1,27 @@
 import cv2
 
-class Camera:
-    def __init__(self):
-        self.cap = cv2.VideoCapture(0)  # Open the default camera (webcam)
+# Open the default camera
+cam = cv2.VideoCapture(0)
 
-    def get_frame(self):
-        ret, frame = self.cap.read()
-        if not ret:
-            return None
-        return frame
+# Get the default frame width and height
+frame_width = int(cam.get(cv2.CAP_PROP_FRAME_WIDTH))
+frame_height = int(cam.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
-    def release(self):
-        self.cap.release()
+# Define the codec and create VideoWriter object
+fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+out = cv2.VideoWriter('output.mp4', fourcc, 20.0, (frame_width, frame_height))
 
-    def __del__(self):
-        self.release() 
+while True:
+    ret, frame = cam.read()
 
+    # Display the captured frame
+    cv2.imshow('Camera', frame)
+
+    # Press 'q' to exit the loop
+    if cv2.waitKey(1) == ord('q'):
+        break
+
+# Release the capture and writer objects
+cam.release()
+out.release()
+cv2.destroyAllWindows()
