@@ -2,7 +2,6 @@ import subprocess
 import time
 
 def start_processes():
-    """Start tracker and controller as subprocesses."""
     processes = {}
     try:
         print("Starting Tracker...")
@@ -18,7 +17,6 @@ def start_processes():
         return None
 
 def stop_processes(processes):
-    """Stop all running subprocesses."""
     for name, process in processes.items():
         if process is not None and process.poll() is None:
             print(f"Terminating {name}...")
@@ -40,7 +38,7 @@ def main():
         print("\nExiting program. Stopping all processes...")
     finally:
         stop_processes(processes)
-        print("All processes terminated. Goodbye!")
+        print("Goodbye!")
 
 if __name__ == "__main__":
     main()
