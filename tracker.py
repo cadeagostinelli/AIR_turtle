@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import socket
 
+
 def track_ping_pong_ball():
     #socket for data to controller
     server_address = ('localhost', 65432)  #match with controller.py
@@ -67,6 +68,8 @@ def track_ping_pong_ball():
     cam.release()
     cv2.destroyAllWindows()
     sock.close()
+
+track_ping_pong_ball()
 
 if __name__ == "__main__":
     track_ping_pong_ball()
