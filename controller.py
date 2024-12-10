@@ -14,8 +14,17 @@ class RobotControllerNode(Node):
     def listen_for_direction(self):
         try:
             data, _ = self.sock.recvfrom(1024)
-            direction = data.decode()
-            self.get_logger().info(f"Received Direction: {direction}")
+            decoded_data = data.decode()
+
+            # Assuming data format "DIRECTION x y"
+            parts = decoded_data.split()
+            if len(parts) >= 3:
+                direction, x, y = parts[0], float(parts[1]), float(parts[2])
+                self.get_logger().info(f"Received Direction: {direction}, X: {x}, Y: {y}")
+            else:
+                direction = decoded_data
+                x = y = None
+                self.get_logger().warn(f"Received Direction without coordinates: {direction}")
 
             #twist controls
             twist = Twist()
@@ -26,16 +35,19 @@ class RobotControllerNode(Node):
             elif direction == "RIGHT":
                 twist.linear.x = 0.0
                 twist.angular.z = -0.5
-            if direction == "UP":
+            elif direction == "UP":
                 twist.linear.x = 0.2  
+                twist.angular.z = 0.0
+            elif direction == "DOWN": 
+                twist.linear.x = -0.2  
                 twist.angular.z = 0.0
             elif direction == "CENTER":
                 twist.linear.x = 0.0  
                 twist.angular.z = 0.0
-
             else:
                 twist.linear.x = 0.0
                 twist.angular.z = 0.0
+
 
             self.publisher.publish(twist)
         except socket.timeout:
