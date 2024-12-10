@@ -52,6 +52,12 @@ class BallTracker(Node):
             ((x, y), radius) = cv2.minEnclosingCircle(c)
 
             if radius > 10:
+                cv2.circle(frame, (int(x), int(y)), int(radius), (0, 255, 255), 2)
+
+                cv2.circle(frame, (int(x), int(y)), 5, (0, 0, 255), -1)
+
+                cv2.putText(frame, "({}, {})".format(int(x), int(y)), (int(x) + 10, int(y)),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
                 # Calculate normalized position
                 norm_x = (x - self.frame_center[0]) / self.outer_circle_radius
                 norm_y = (y - self.frame_center[1]) / self.outer_circle_radius
@@ -69,7 +75,7 @@ class BallTracker(Node):
                 else:
                     output = (norm_x, norm_y)
                 print(f"Output: {output}")
-                
+
                 # Publish position
                 msg = Float32MultiArray()
                 msg.data = [float(norm_x), float(norm_y), float(distance)]  # Ensure floats
