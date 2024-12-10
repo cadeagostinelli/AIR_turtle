@@ -10,6 +10,10 @@ def start_processes():
         print("Starting Controller...")
         processes["controller"] = subprocess.Popen(["python", "controller.py"])
         
+        print("Starting Turtlesim...")
+        # Start turtlesim node
+        processes["turtlesim"] = subprocess.Popen(["ros2", "run", "turtlesim", "turtlesim_node"])
+        
         return processes
     except Exception as e:
         print(f"Error starting processes: {e}")
